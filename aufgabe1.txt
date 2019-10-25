@@ -1,0 +1,20 @@
+a)
+Compilerfehler
+HelloWorld.java:3: error: ';' expected
+        System.out.println("Hello, World!")
+                                           ^
+
+b)
+Compilerfehler
+HalloWelt.java:1: error: class HelloWorld is public, should be declared in a file named HelloWorld.java
+public class HelloWorld {
+       ^
+
+c)
+Runtimefehler
+Fehler: Hauptmethode in Klasse HelloWorld nicht gefunden. Definieren Sie die Hauptmethode als:
+   public static void main(String[] args):
+oder eine JavaFX-Anwendung muss javafx.application.Application erweitern
+
+d)
+kein Fehler
