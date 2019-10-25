@@ -11,7 +11,7 @@ public class HelloWorld {
        ^
 
 c)
-Runtimefehler
+Laufzeitfehler
 Fehler: Hauptmethode in Klasse HelloWorld nicht gefunden. Definieren Sie die Hauptmethode als:
    public static void main(String[] args):
 oder eine JavaFX-Anwendung muss javafx.application.Application erweitern
