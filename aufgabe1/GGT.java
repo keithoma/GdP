@@ -28,10 +28,10 @@ public class GGT {
         }
         int a = Integer.parseInt(args[0]);
         int b = Integer.parseInt(args[1]);
-        if (a < 0 || b < 0) {
-            System.out.println("Both parameters must be natural (non-negative) numbers.");
+        if (a <= 0 || b <= 0) {
+            System.out.println("Both parameters must be natural numbers, greater than zero.");
             System.exit(2);
         }
-        System.out.printf("ggt(%d, %d) = %d\n", a, b, ggt(a, b));
+        System.out.printf("ggT(%d, %d) = %d\n", a, b, ggt(a, b));
     }
 }
