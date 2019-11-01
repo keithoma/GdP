@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - GGT",
+            "request": "launch",
+            "mainClass": "GGT"
+        }
+    ]
+}
