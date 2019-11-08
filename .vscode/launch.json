@@ -2,6 +2,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Caesar",
+            "request": "launch",
+            "mainClass": "Caesar",
+            "args": [
+                "3",
+                "Hello, World!",
+                "Bar Bar Bar"
+            ]
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - GGT",
             "request": "launch",
             "mainClass": "GGT"
