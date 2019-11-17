@@ -52,9 +52,10 @@ public class Caesar {
      */
     public String encrypt(String input)
     {
+        char[] chars = input.toCharArray();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < input.length(); i++)
-            sb.append(encryptChar(input.charAt(i)));
+            sb.append(encryptChar(chars[i]));
         return sb.toString();
     }
 
