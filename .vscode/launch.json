@@ -2,6 +2,12 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - PrimeUtilsSimpleTest",
+            "request": "launch",
+            "mainClass": "PrimeUtilsSimpleTest"
+        },
+        {
+            "type": "java",
             "name": "Aufgabe 2a - Caesar",
             "request": "launch",
             "mainClass": "Caesar",
