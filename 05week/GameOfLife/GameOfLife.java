@@ -1,10 +1,14 @@
-import StdIn.*;
+import java.io.*;
 
 public class GameOfLife {
     private enum CellState { Dead, Alive };
     private CellState[][] board;
     private int rowCount;
     private int columnCount;
+
+	private interface IntGetter {
+		public int op();
+	}
 
     private static class Pair {
         int row;
@@ -74,23 +78,33 @@ public class GameOfLife {
             this.board[living[i].row][living[i].column] = CellState.Alive;
     }
 
-    public static GameOfLife constructFromStdIn()
+    public static GameOfLife construct(IntGetter readInt)
     {
-        int cols = StdIn.readInt();
-        int rows = StdIn.readInt();
-        int count = StdIn.readInt();
+        int cols = readInt.op();
+        int rows = readInt.op();
+        int count = readInt.op();
 
         Pair[] values = new Pair[count];
 
         for (int k = 0; k < count; ++k)
         {
-            int i = StdIn.readInt();
-            int j = StdIn.readInt();
+            int i = readInt.op();
+            int j = readInt.op();
             values[k] = new Pair(i, j);
         }
 
         return new GameOfLife(rows, cols, values);
     }
+
+    public static GameOfLife constructFromStdIn()
+	{
+		return construct(() -> StdIn.readInt());
+	}
+
+	public static GameOfLife constructFromFile(String fileName)
+	{
+		FileReader reader = new FileReader(fileName);
+	}
 
     public static void main(String[] args)
     {
