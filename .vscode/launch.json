@@ -2,7 +2,20 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - PrimeUtilsSimpleTest",
+            "name": "05/GameOfLife",
+            "request": "launch",
+            "classPaths": [
+                "${env:USERPROFILE}/AppData/Roaming/Code/User/workspaceStorage/4e208c0aef88ad239f85c0b8f01954bf/redhat.java/jdt_ws/jdt.ls-java-project/bin",
+                "${workspaceFolder}/05week/GameOfLife/stdlib.jar",
+                "."
+            ],
+            "cwd": "${workspaceFolder}/05week",
+            "args": "< GOLStable.conf",
+            "mainClass": "GameOfLife"
+        },
+        {
+            "type": "java",
+            "name": "05/PrimeUtilsSimpleTest",
             "request": "launch",
             "mainClass": "PrimeUtilsSimpleTest"
         },
