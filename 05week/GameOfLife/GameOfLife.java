@@ -6,9 +6,14 @@ public class GameOfLife {
     private int rowCount;
     private int columnCount;
 
-    private class Pair {
+    private static class Pair {
         int row;
         int column;
+
+		public Pair(int a, int b) {
+			row = a;
+			column = b;
+		}
     }
 
     // Returns 1 if cell state reflects Alive, 0 otherwise.
@@ -62,7 +67,7 @@ public class GameOfLife {
         this.board = new CellState[rows][columns];
 
         for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; ++cols)
+            for (int j = 0; j < columns; ++columns)
                 this.board[i][j] = CellState.Dead;
 
         for (int i = 0; i < living.length; ++i)
@@ -77,7 +82,7 @@ public class GameOfLife {
 
         Pair[] values = new Pair[count];
 
-        for (int k = 0; i < count; ++k)
+        for (int k = 0; k < count; ++k)
         {
             int i = StdIn.readInt();
             int j = StdIn.readInt();
