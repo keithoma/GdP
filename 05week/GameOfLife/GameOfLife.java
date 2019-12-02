@@ -6,7 +6,7 @@ public class GameOfLife {
     private int rowCount;
     private int columnCount;
 
-	private interface IntGetter {
+	public interface IntGetter {
 		public int op();
 	}
 
@@ -49,7 +49,7 @@ public class GameOfLife {
     }
 
     // progresses live from t to t+1
-    private void evolve()
+    private void evolution()
     {
         for (int i = 0; i < board.length; ++i)
         {
@@ -103,12 +103,13 @@ public class GameOfLife {
 
 	public static GameOfLife constructFromFile(String fileName)
 	{
-		FileReader reader = new FileReader(fileName);
+        //FileReader reader = new FileReader(fileName);
+        return null;
 	}
 
     public static void main(String[] args)
     {
         GameOfLife gol = constructFromStdIn();
-        gol.evolve();
+        gol.evolution();
     }
 }

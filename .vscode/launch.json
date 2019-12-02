@@ -9,7 +9,7 @@
                 "${workspaceFolder}/05week/GameOfLife/stdlib.jar",
                 "."
             ],
-            "cwd": "${workspaceFolder}/05week",
+            "cwd": "${workspaceFolder}/05week/GameOfLife",
             "args": "< GOLStable.conf",
             "mainClass": "GameOfLife"
         },
