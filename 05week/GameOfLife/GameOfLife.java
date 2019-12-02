@@ -1,4 +1,6 @@
-import java.io.*;
+// vim:et:ts=4:sw=4
+/*!*/ import java.io.*; // simply for Thread.sleep in consoleMain() TUI-convenience function
+/*?*/ import java.awt.Color; // WTF, why not an alias in StdDraw
 
 public class GameOfLife {
     private enum CellState { Dead, Alive };
@@ -105,8 +107,8 @@ public class GameOfLife {
 
     private void drawBoardToConsole()
     {
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
 
         System.out.printf("+");
         for (int j = 0; j < this.columnCount; ++j)
@@ -142,33 +144,58 @@ public class GameOfLife {
     public void textMain()
     {
         drawBoardToConsole();
-		for (;;)
-		{
+        for (;;)
+        {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-			evolution();
-			drawBoardToConsole();
-		}
+            evolution();
+            drawBoardToConsole();
+        }
     }
 
     public void guiMain()
     {
+        double CELL_WIDTH = 12.0;
+        double CELL_HEIGHT = 12.0;
+
+        // setup
         StdDraw.enableDoubleBuffering();
+        StdDraw.setXscale(0, this.columnCount * CELL_WIDTH);
+        StdDraw.setYscale(0, this.columnCount * CELL_HEIGHT);
+
+        // draw grid
+        StdDraw.setPenColor(StdDraw.BLUE);
+        for (int i = 0; i < this.rowCount; ++i)
+        {
+            StdDraw.line(0.0,
+                         CELL_WIDTH * i,
+                         CELL_WIDTH * this.columnCount,
+                         CELL_WIDTH * i);
+
+            for (int j = 0; j < this.columnCount; ++j)
+                StdDraw.line(CELL_WIDTH * j,
+                             0.0,
+                             CELL_WIDTH * j,
+                             this.rowCount * CELL_HEIGHT);
+        }
+
+        // main loop
         for (;;)
         {
-            double width = 10.0;
-            double height = 10.0;
-    
             for (int i = 0; i < this.rowCount; ++i)
             {
                 for (int j = 0; j < this.columnCount; ++j)
                 {
-                    double y = i * height - height / 2;
-                    double x = j * width - width / 2;
-                    StdDraw.filledRectangle(x, y, width / 2, height / 2);
+                    double y = i * CELL_HEIGHT + CELL_HEIGHT / 2;
+                    double x = j * CELL_WIDTH + CELL_WIDTH / 2;
+                    Color color = StdDraw.WHITE;
+                    if (this.board[i][j] == CellState.Alive)
+                        color = StdDraw.GREEN;
+                    StdDraw.setPenColor(color);
+                    StdDraw.filledRectangle(x, y, CELL_WIDTH / 2 - 2, CELL_HEIGHT / 2 - 2);
                 }
             }
 
