@@ -139,24 +139,52 @@ public class GameOfLife {
         return null; // here be dragons, no time.
     }
 
+    public void textMain()
+    {
+        drawBoardToConsole();
+		for (;;)
+		{
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+			evolution();
+			drawBoardToConsole();
+		}
+    }
+
+    public void guiMain()
+    {
+        StdDraw.enableDoubleBuffering();
+        for (;;)
+        {
+            double width = 10.0;
+            double height = 10.0;
+    
+            for (int i = 0; i < this.rowCount; ++i)
+            {
+                for (int j = 0; j < this.columnCount; ++j)
+                {
+                    double y = i * height - height / 2;
+                    double x = j * width - width / 2;
+                    StdDraw.filledRectangle(x, y, width / 2, height / 2);
+                }
+            }
+
+            StdDraw.show();
+            StdDraw.pause(500);
+            evolution();
+        }
+    }
+
     public static void main(String[] args)
     {
         GameOfLife gol = constructFromStdIn();
 
-        gol.drawBoardToConsole();
-		for (;;)
-		{
-            // I'm 25% part-time student and have no time to attend to GdP VL/UE/...,
-            // Hence I'm a little shy in using ANY library (even standard java.* libs),
-            // which makes it a little ugly to use your provided StdDraw.pause(int) here
-            // for a non-GUI app, but yeah, you wanted a GUI app anyways. :-)
-			StdDraw.pause(500);
-			gol.evolution();
-			gol.drawBoardToConsole();
-		}
-
-        // but still, I suck at GUI coding (and I have zero time, tbh, to do more),
-        // hence, no GUI, hence, hopefully
-        // not full, but at least a few points. PLEEEEEEASE! :-)
+        if (args.length > 0)
+            gol.textMain(); // debugging on non-GUI systems made eas(y|ier).
+        else
+            gol.guiMain();
     }
 }
