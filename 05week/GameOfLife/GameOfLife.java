@@ -2,22 +2,24 @@ import java.io.*;
 
 public class GameOfLife {
     private enum CellState { Dead, Alive };
+
     private CellState[][] board;
     private int rowCount;
     private int columnCount;
+    private int generation;
 
-	public interface IntGetter {
-		public int op();
-	}
+    public interface IntGetter {
+        public int op();
+    }
 
     private static class Pair {
         int row;
         int column;
 
-		public Pair(int a, int b) {
-			row = a;
-			column = b;
-		}
+        public Pair(int a, int b) {
+            row = a;
+            column = b;
+        }
     }
 
     // Returns 1 if cell state reflects Alive, 0 otherwise.
@@ -32,11 +34,11 @@ public class GameOfLife {
     // @param j column index to the cell
     private int getLivingNeighbours(int i, int j)
     {
-        int top = i > 0 ? i - 1 : rowCount;
-        int bottom = i < rowCount ? i + 1 : 0;
+        int top = i > 0 ? i - 1 : this.rowCount - 1;
+        int bottom = (i + 1) % this.rowCount;
 
-        int left = j == 0 ? columnCount : j - 1;
-        int right = j < columnCount ? j + 1 : 0;
+        int left = j > 0 ? j - 1 : columnCount - 1;
+        int right = (j + 1) % this.columnCount;
 
         return abs(this.board[top][left])
              + abs(this.board[top][j])
@@ -64,11 +66,16 @@ public class GameOfLife {
                     this.board[i][j] = CellState.Dead;
             }
         }
+
+        this.generation = this.generation + 1;
     }
 
     GameOfLife(int rows, int columns, Pair[] living)
     {
+        this.rowCount = rows;
+        this.columnCount = columns;
         this.board = new CellState[rows][columns];
+        this.generation = 1;
 
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; ++columns)
@@ -96,20 +103,60 @@ public class GameOfLife {
         return new GameOfLife(rows, cols, values);
     }
 
-    public static GameOfLife constructFromStdIn()
-	{
-		return construct(() -> StdIn.readInt());
-	}
+    private void drawBoardToConsole()
+    {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
 
-	public static GameOfLife constructFromFile(String fileName)
-	{
+        System.out.printf("+");
+        for (int j = 0; j < this.columnCount; ++j)
+            System.out.printf("-");
+        System.out.printf("+\n");
+
+        for (int i = 0; i < this.rowCount; ++i)
+        {
+            System.out.printf("|");
+            for (int j = 0; j < this.columnCount; ++j)
+                System.out.printf("%c", this.board[i][j] == CellState.Alive ? 'X' : ' ');
+            System.out.printf("|\n");
+        }
+
+        System.out.printf("+");
+        for (int j = 0; j < this.columnCount; ++j)
+            System.out.printf("-");
+        System.out.printf("+\n");
+        System.out.printf("Generation %d\n", this.generation);
+    }
+
+    public static GameOfLife constructFromStdIn()
+    {
+        return construct(() -> StdIn.readInt());
+    }
+
+    public static GameOfLife constructFromFile(String fileName)
+    {
         //FileReader reader = new FileReader(fileName);
-        return null;
-	}
+        return null; // here be dragons, no time.
+    }
 
     public static void main(String[] args)
     {
         GameOfLife gol = constructFromStdIn();
-        gol.evolution();
+
+        gol.drawBoardToConsole();
+		for (;;)
+		{
+            // I'm 25% part-time student and have no time to attend to GdP VL/UE/...,
+            // Hence I'm a little shy in using ANY library (even standard java.* libs),
+            // which makes it a little ugly to use your provided StdDraw.pause(int) here
+            // for a non-GUI app, but yeah, you wanted a GUI app anyways. :-)
+			StdDraw.pause(500);
+			gol.evolution();
+			gol.drawBoardToConsole();
+		}
+
+        // but still, I suck at GUI coding (and I have zero time, tbh, to do more),
+        // hence, no GUI, hence, hopefully
+        // not full, but at least a few points. PLEEEEEEASE! :-)
     }
 }
