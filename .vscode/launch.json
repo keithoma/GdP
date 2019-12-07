@@ -2,6 +2,12 @@
     "configurations": [
         {
             "type": "java",
+            "name": "praktikum-A3-Bigs",
+            "request": "launch",
+            "mainClass": "Bigs"
+        },
+        {
+            "type": "java",
             "name": "05/GameOfLife",
             "request": "launch",
             "classPaths": [
