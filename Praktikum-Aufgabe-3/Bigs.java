@@ -1,6 +1,17 @@
 import java.lang.Math.*;
 
 class Bigs {
+    // Helper method to test whether @p n is ZERO value or not.
+    static boolean isZero(int[] n)
+    {
+        for (int i = 0; i < n.length; ++i)
+            if (n[i] != 0)
+                return false;
+        return true;
+    }
+
+    // -------------------------------------------------------------------------------
+
     // addiert die Ziffernfelder a und b
     public static int[] add(int[] a, int[] b)
     {
@@ -12,17 +23,9 @@ class Bigs {
     // bc (s.u.) benutzt wird: Umbruch nach 68 Ziffern mit einem \ am Ende
     static void print(int[] n)
     {
-        System.out.println("Printing...");
         char[] buf = new char[n.length];
-        int s = 0;
-        int d = n.length - 1;
-        while (s < n.length)
-        {
-            System.out.printf("|n|=%d, s=%d, d=%d\n", n, s, n.length);
+        for (int s = 0, d = n.length - 1; s < n.length; s++, d--)
             buf[d] = (char)('0' + n[s]);
-            s++;
-            d--;
-        }
         System.out.println(buf);
     }
 
@@ -56,7 +59,15 @@ class Bigs {
     // ganzzahliger Quotient bei Division durch 10
     static int[] div10(int[] n)
     {
-        return null; // TODO
+        if (n.length < 2)
+            return Bigs.Null();
+        else
+        {
+            int[] m = new int[n.length - 1];
+            for (int i = 1; i < n.length; ++i)
+                m[i - 1] = n[i];
+            return m;
+        }
     }
 
     // Umwandlung einer beliebigen int-Zahl in ein Ziffernfeld
@@ -78,7 +89,7 @@ class Bigs {
     // kopiert den Wert von n
     static int[] copy(int[] n)
     {
-        return null; // TODO
+        return n.clone();
     }
 
     // multipliziert das Ziffernfeld n mit einer (einstelligen!) int-Zahl
@@ -90,7 +101,16 @@ class Bigs {
     // multipliziert das Ziffernfeld n mit 10
     static int[] times10(int[] n)
     {
-        return null; // TODO
+        if (Bigs.isZero(n))
+            return n;
+        else
+        {
+            int[] m = new int[n.length + 1];
+            m[0] = 0;
+            for (int i = 0; i < n.length; ++i)
+                m[i + 1] = n[i];
+            return m;
+        }
     }
 
     // multipliziert zwei Ziffernfeld
