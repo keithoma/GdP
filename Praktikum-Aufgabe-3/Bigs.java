@@ -19,7 +19,7 @@ class Bigs {
         while (s < n.length)
         {
             System.out.printf("|n|=%d, s=%d, d=%d\n", n, s, n.length);
-            buf[d] = n[s];
+            buf[d] = (char)('0' + n[s]);
             s++;
             d--;
         }
@@ -114,13 +114,13 @@ class Bigs {
     // Test auf kleiner-Relation zweier Ziffernfelder: a < b ?
     static boolean less(int[] a, int[] b)
     {
-        return null; // TODO
+        return false; // TODO
     }
 
     // Test auf Gleichheit zweier Ziffernfelder
     static boolean equal(int[] a, int[] b)
     {
-        return null; // TODO
+        return false; // TODO
     }
 
     // Test auf Korrektheit eines Ziffernfeldes: Feld existiert und enthaelt
@@ -128,7 +128,7 @@ class Bigs {
     // keine fuehrenden Nullen (ausser bei Null selbst)
     static boolean ok(int[] n)
     {
-        return null; // TODO
+        return false; // TODO
     }
 
     // gibt die (kleinste) Ziffer mit der groessten Haeufigkeit in n aus
