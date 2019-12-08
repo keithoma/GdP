@@ -175,7 +175,19 @@ class Bigs {
     // multipliziert das Ziffernfeld n mit einer (einstelligen!) int-Zahl
     static int[] times(int[] n, int d)
     {
-        return null; // TODO
+		int carry = 0;
+		int[] m = new int[n.length + 1];
+		for (int i = 0; i < m.length; ++i)
+		{
+			int p = at(n, i) * d + carry;
+			m[i] = p % 10;
+			carry = p / 10;
+		}
+
+		if (carry != 0)
+			return m;
+		else
+            return copy_n(m, m.length - 1);
     }
 
     // multipliziert das Ziffernfeld n mit 10
@@ -284,6 +296,7 @@ class Bigs {
         checkLess(fromInt(33), fromInt(34));
         checkLess(fromInt(23), fromInt(24));
 		check("!(1234 < 1234)", !less(fromInt(1234), fromInt(1234)));
+		checkEqu(times(fromInt(86442), 9), fromInt(77778));
 
         // --------------------------------------------------------
 		/*
