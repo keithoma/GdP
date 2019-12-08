@@ -1,8 +1,8 @@
-import java.lang.Math.*;
+import java.lang.Math.*; // TODO: log10 ;-(
 
 class Bigs {
     // Helper method to test whether @p n is ZERO value or not.
-    static boolean isZero(int[] n)
+    private static boolean isZero(int[] n)
     {
         for (int i = 0; i < n.length; ++i)
             if (n[i] != 0)
@@ -10,12 +10,75 @@ class Bigs {
         return true;
     }
 
+    // Retrieves digit at given index position.
+    private static int at(int[] n, int i)
+    {
+        return i >= 0 && i < n.length ? n[i] : 0;
+    }
+
+    // Creates copy of @p n with up to @p cutoff elements.
+    private static int[] copy_n(int[] n, int cutoff)
+    {
+        // return Arrays.copyOf(n, cutoff);
+        int len = n.length < cutoff ? n.length : cutoff;
+        int[] m = new int[len];
+        for (int i = 0; i < len; ++i)
+            m[i] = n[i];
+        return m;
+    }
+
+    // Converts nubmer @p n to String.
+    private static String to_s(int[] n)
+    {
+        // gibt das Ziffernfeld n in lesbarer dezimaler Form *zurueck*.
+        // bei sehr langen Zahlen soll das Format verwendet werden, welches auch von
+        // bc (s.u.) benutzt wird: Umbruch nach 68 Ziffern mit einem \ am Ende
+
+        char[] buf = new char[n.length + 2 * (n.length / 68)];
+        for (int s = n.length - 1, d = 0, i = 0; s >= 0; --s, ++d, ++i)
+        {
+            buf[d] = (char) ('0' + n[s]);
+            if (i != 0 && (i % 68) == 0)
+            {
+                buf[++d] = '\\';
+                buf[++d] = '\n';
+            }
+        }
+        return new String(buf);
+    }
+
+    // mini-unit-test fn =
+    private static void checkEqu(int[] a, int[] b)
+    {
+        boolean ok = Bigs.equal(a, b);
+        System.out.printf("Assert %s = %s. %s\n", to_s(a), to_s(b), ok ? "OK" : "FAIL");
+    }
+
+    // mini-unit-test fn <
+    private static void checkLess(int[] a, int[] b)
+    {
+        boolean ok = Bigs.less(a, b);
+        System.out.printf("Assert %s < %s. %s\n", to_s(a), to_s(b), ok ? "OK" : "FAIL");
+    }
+
     // -------------------------------------------------------------------------------
 
     // addiert die Ziffernfelder a und b
     public static int[] add(int[] a, int[] b)
     {
-        return null; // TODO
+        int mlen = 1 + (a.length > b.length ? a.length : b.length);
+        int[] m = new int[mlen];
+        int rem = 0;
+        for (int i = 0; i < mlen; ++i)
+        {
+            int sum = at(a, i) + at(b, i) + rem;
+            m[i] = sum % 10;
+            rem = sum / 10;
+        }
+        if (rem != 0)
+            return m;
+        else
+            return copy_n(m, m.length - 1);
     }
 
     // gibt das Ziffernfeld n in lesbarer dezimaler Form aus
@@ -23,10 +86,7 @@ class Bigs {
     // bc (s.u.) benutzt wird: Umbruch nach 68 Ziffern mit einem \ am Ende
     static void print(int[] n)
     {
-        char[] buf = new char[n.length];
-        for (int s = 0, d = n.length - 1; s < n.length; s++, d--)
-            buf[d] = (char)('0' + n[s]);
-        System.out.println(buf);
+        System.out.println(to_s(n));
     }
 
     // konstruiert ein einstelliges Ziffernfeld aus der Ziffer d
@@ -73,17 +133,17 @@ class Bigs {
     // Umwandlung einer beliebigen int-Zahl in ein Ziffernfeld
     static int[] fromInt(int n)
     {
-        int i = 0;
-        double cap = java.lang.Math.log10(n);
-        int[] big = new int[1 + (int)(cap)];
-        while (n != 0)
+        if (n > 0)
         {
-            big[i] = n % 10;
-            n /= 10;
-            i++;
-        }
+            double cap = java.lang.Math.log10(n);
+            int[] big = new int[1 + (int)(cap)];
+            for (int i = 0; n != 0; ++i, n /= 10)
+                big[i] = n % 10;
 
-        return big;
+            return big;
+        }
+        else
+            return Null();
     }
 
     // kopiert den Wert von n
@@ -116,12 +176,16 @@ class Bigs {
     // multipliziert zwei Ziffernfeld
     static int[] times(int[] a, int[] b)
     {
-        return null; // TODO
+        if (Bigs.equal(a, b))
+            return Bigs.square(a);
+        else
+            return null; // TODO
     }
 
     // Quadratzahl eines Ziffernfeldes
     static int[] square(int[] a)
     {
+        // https://bakingsciencetraveller.wordpress.com/2017/07/28/schriftliches-quadrieren/
         return null; // TODO
     }
 
@@ -134,21 +198,46 @@ class Bigs {
     // Test auf kleiner-Relation zweier Ziffernfelder: a < b ?
     static boolean less(int[] a, int[] b)
     {
-        return false; // TODO
+        if (a.length < b.length)
+            return true;
+        else if (a.length > b.length)
+            return false;
+        else
+        {
+            for (int i = 0; i < a.length; ++i)
+                if (!(a[i] < b[i]))
+                    return false;
+            return true;
+        }
     }
 
     // Test auf Gleichheit zweier Ziffernfelder
     static boolean equal(int[] a, int[] b)
     {
-        return false; // TODO
+        if (a.length != b.length)
+            return false;
+
+        for (int i = 0; i < a.length; ++i)
+            if (a[i] != b[i])
+                return false;
+
+        return true;
     }
 
-    // Test auf Korrektheit eines Ziffernfeldes: Feld existiert und enthaelt
-    // mindenstens eine Ziffer, alle Positionen liegen zwischen 0 und 9
-    // keine fuehrenden Nullen (ausser bei Null selbst)
+    // Test auf Korrektheit eines Ziffernfeldes:
+    // - Feld existiert und enthaelt mindenstens eine Ziffer,
+    // - alle Positionen liegen zwischen 0 und 9
+    // - keine fuehrenden Nullen (ausser bei Null selbst)
     static boolean ok(int[] n)
     {
-        return false; // TODO
+        if (n.length == 0)
+            return false;
+        else if (n.length > 1 && n[0] == 0)
+            return false;
+        for (int i = 0; i < n.length; ++i)
+            if (n[i] < 0 || n[i] > 9)
+                return false;
+        return true;
     }
 
     // gibt die (kleinste) Ziffer mit der groessten Haeufigkeit in n aus
@@ -159,9 +248,13 @@ class Bigs {
 
     public static void main(String[] s)
     {
-        int[] x = fromInt(1234);
-        print(x);
+        checkEqu(add(fromInt(1234), fromInt(5678)), fromInt(6912));
+        checkLess(fromInt(0), fromInt(1));
+        checkLess(fromInt(99), fromInt(888));
+        checkLess(fromInt(33), fromInt(34));
+        checkLess(fromInt(23), fromInt(24));
 
+        // --------------------------------------------------------
         int[] a = One();
         for (int i = 0; i < 33222; ++i)
             a = times(a, 2);
