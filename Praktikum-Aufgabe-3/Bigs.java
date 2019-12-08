@@ -1,6 +1,20 @@
-import java.lang.Math.*; // TODO: log10 ;-(
-
+import java.lang.Math.*;
 class Bigs {
+	// Helper method to retrieve ceil(log10(.)) of a natural number.
+	private static int log10d(int n)
+	{
+		return 1 + (int) java.lang.Math.log10(n);
+		/*
+		int y = 1;
+		while (n != 0)
+		{
+			n /= 10;
+			y++;
+		}
+		return y;
+		*/
+	}
+
     // Helper method to test whether @p n is ZERO value or not.
     private static boolean isZero(int[] n)
     {
@@ -46,6 +60,12 @@ class Bigs {
         }
         return new String(buf);
     }
+
+    // mini-unit-test fn boolean
+	private static void check(String s, boolean b)
+	{
+		System.out.printf("Assert %s: %s\n", s, b ? "OK" : "FAIL");
+	}
 
     // mini-unit-test fn =
     private static void checkEqu(int[] a, int[] b)
@@ -113,7 +133,7 @@ class Bigs {
     // Rest des Ziffernfeldes n bei Division durch 10 (eine int-Zahl!)
     static int mod10(int[] n)
     {
-        return 0; // TODO
+		return n[0];
     }
 
     // ganzzahliger Quotient bei Division durch 10
@@ -135,8 +155,8 @@ class Bigs {
     {
         if (n > 0)
         {
-            double cap = java.lang.Math.log10(n);
-            int[] big = new int[1 + (int)(cap)];
+            int cap = log10d(n);
+            int[] big = new int[cap];
             for (int i = 0; n != 0; ++i, n /= 10)
                 big[i] = n % 10;
 
@@ -186,13 +206,13 @@ class Bigs {
     static int[] square(int[] a)
     {
         // https://bakingsciencetraveller.wordpress.com/2017/07/28/schriftliches-quadrieren/
-        return null; // TODO
+        return times(a, a);
     }
 
     // Kubikzahl eines Ziffernfeldes
     static int[] cubic(int[] a)
     {
-        return null; // TODO
+        return times(times(a, a), a);
     }
 
     // Test auf kleiner-Relation zweier Ziffernfelder: a < b ?
@@ -204,10 +224,11 @@ class Bigs {
             return false;
         else
         {
-            for (int i = 0; i < a.length; ++i)
-                if (!(a[i] < b[i]))
-                    return false;
-            return true;
+			// a: 1234 < b: 1235
+            for (int i = a.length - 1; i >= 0; --i)
+				if (a[i] > b[i])
+					return false;
+            return a[0] < b[0];
         }
     }
 
@@ -243,7 +264,16 @@ class Bigs {
     // gibt die (kleinste) Ziffer mit der groessten Haeufigkeit in n aus
     static void maxDigit(int[] n)
     {
-        // TODO
+		int freqs[] = new int[10];
+		for (int i = 0; i < n.length; ++i)
+			freqs[n[i]]++;
+
+		int max = 0;
+		for (int i = 1; i < freqs.length; ++i)
+			if (freqs[i] > freqs[max])
+				max = i;
+
+		System.out.printf("%d: %d\n", max, freqs[max]);
     }
 
     public static void main(String[] s)
@@ -253,8 +283,10 @@ class Bigs {
         checkLess(fromInt(99), fromInt(888));
         checkLess(fromInt(33), fromInt(34));
         checkLess(fromInt(23), fromInt(24));
+		check("!(1234 < 1234)", !less(fromInt(1234), fromInt(1234)));
 
         // --------------------------------------------------------
+		/*
         int[] a = One();
         for (int i = 0; i < 33222; ++i)
             a = times(a, 2);
@@ -273,5 +305,6 @@ class Bigs {
         System.out.println(less(a, c)); // Beantwortet die Frage aus der Aufgabenueberschrift
         maxDigit(a);
         maxDigit(c);
+		*/
     }
 }
