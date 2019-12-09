@@ -1,15 +1,15 @@
 class Bigs {
-	// Helper method to retrieve ceil(log10(.)) of a natural number.
-	private static int log10d(int n)
-	{
+    // Helper method to retrieve ceil(log10(.)) of a natural number.
+    private static int log10d(int n)
+    {
         int y = 0;
-		while (n != 0)
-		{
-			n /= 10;
-			y++;
-		}
-		return y;
-	}
+        while (n != 0)
+        {
+            n /= 10;
+            y++;
+        }
+        return y;
+    }
 
     // Helper method to test whether @p n is ZERO value or not.
     private static boolean isZero(int[] n)
@@ -58,10 +58,10 @@ class Bigs {
     }
 
     // mini-unit-test fn boolean
-	private static void check(String s, boolean b)
-	{
-		System.out.printf("Assert %s: %s\n", s, b ? "OK" : "FAIL");
-	}
+    private static void check(String s, boolean b)
+    {
+        System.out.printf("Assert %s: %s\n", s, b ? "OK" : "FAIL");
+    }
 
     // mini-unit-test fn =
     private static void checkEqu(int[] a, int[] b)
@@ -132,7 +132,7 @@ class Bigs {
     // Rest des Ziffernfeldes n bei Division durch 10 (eine int-Zahl!)
     static int mod10(int[] n)
     {
-		return n[0];
+        return n[0];
     }
 
     // ganzzahliger Quotient bei Division durch 10
@@ -265,10 +265,10 @@ class Bigs {
             return false;
         else
         {
-			// a: 1234 < b: 1235
+            // a: 1234 < b: 1235
             for (int i = a.length - 1; i >= 0; --i)
-				if (a[i] > b[i])
-					return false;
+                if (a[i] > b[i])
+                    return false;
             return a[0] < b[0];
         }
     }
@@ -305,16 +305,16 @@ class Bigs {
     // gibt die (kleinste) Ziffer mit der groessten Haeufigkeit in n aus
     static void maxDigit(int[] n)
     {
-		int freqs[] = new int[10];
-		for (int i = 0; i < n.length; ++i)
-			freqs[n[i]]++;
+        int freqs[] = new int[10];
+        for (int i = 0; i < n.length; ++i)
+            freqs[n[i]]++;
 
-		int max = 0;
-		for (int i = 1; i < freqs.length; ++i)
-			if (freqs[i] > freqs[max])
-				max = i;
+        int max = 0;
+        for (int i = 1; i < freqs.length; ++i)
+            if (freqs[i] > freqs[max])
+                max = i;
 
-		System.out.printf("%d: %d\n", max, freqs[max]);
+        System.out.printf("%d: %d\n", max, freqs[max]);
     }
 
     public static void main(String[] s)
