@@ -1,18 +1,14 @@
-import java.lang.Math.*;
 class Bigs {
 	// Helper method to retrieve ceil(log10(.)) of a natural number.
 	private static int log10d(int n)
 	{
-		return 1 + (int) java.lang.Math.log10(n);
-		/*
-		int y = 1;
+        int y = 0;
 		while (n != 0)
 		{
 			n /= 10;
 			y++;
 		}
 		return y;
-		*/
 	}
 
     // Helper method to test whether @p n is ZERO value or not.
@@ -49,10 +45,10 @@ class Bigs {
         // bc (s.u.) benutzt wird: Umbruch nach 68 Ziffern mit einem \ am Ende
 
         char[] buf = new char[n.length + 2 * (n.length / 68)];
-        for (int s = n.length - 1, d = 0, i = 0; s >= 0; --s, ++d, ++i)
+        for (int s = n.length - 1, d = 0, i = 1; s >= 0; --s, ++d, ++i)
         {
             buf[d] = (char) ('0' + n[s]);
-            if (i != 0 && (i % 68) == 0)
+            if ((i % 68) == 0)
             {
                 buf[++d] = '\\';
                 buf[++d] = '\n';
@@ -88,15 +84,18 @@ class Bigs {
     {
         int mlen = 1 + (a.length > b.length ? a.length : b.length);
         int[] m = new int[mlen];
-        int rem = 0;
-        for (int i = 0; i < mlen; ++i)
+        int carry = 0;
+        for (int i = 0; i < m.length - 1; ++i)
         {
-            int sum = at(a, i) + at(b, i) + rem;
+            int sum = at(a, i) + at(b, i) + carry;
             m[i] = sum % 10;
-            rem = sum / 10;
+            carry = sum / 10;
         }
-        if (rem != 0)
+        if (carry != 0)
+        {
+            m[m.length - 1] = carry;
             return m;
+        }
         else
             return copy_n(m, m.length - 1);
     }
@@ -175,19 +174,27 @@ class Bigs {
     // multipliziert das Ziffernfeld n mit einer (einstelligen!) int-Zahl
     static int[] times(int[] n, int d)
     {
-		int carry = 0;
-		int[] m = new int[n.length + 1];
-		for (int i = 0; i < m.length; ++i)
-		{
-			int p = at(n, i) * d + carry;
-			m[i] = p % 10;
-			carry = p / 10;
-		}
+        if (d == 0)
+            return Null();
+        else if (d == 1)
+            return n;
+        else
+        {
+            int carry = 0;
+            int[] m = new int[n.length + 1];
+            for (int i = 0; i < n.length; ++i)
+            {
+                int p = at(n, i) * d + carry;
+                m[i] = p % 10;
+                carry = p / 10;
+            }
+            m[n.length] = carry;
 
-		if (carry != 0)
-			return m;
-		else
-            return copy_n(m, m.length - 1);
+            if (carry != 0)
+                return m;
+            else
+                return copy_n(m, m.length - 1);
+        }
     }
 
     // multipliziert das Ziffernfeld n mit 10
@@ -205,13 +212,35 @@ class Bigs {
         }
     }
 
+    // a^(10^n)
+    private static int[] pow10(int[] n, int e)
+    {
+        if (Bigs.isZero(n) || e == 0)
+            return n;
+        else
+        {
+            int[] m = new int[n.length + e];
+            for (int i = 0; i < e; ++i)
+                m[0] = 0;
+            for (int i = 0; i < n.length; ++i)
+                m[i + e] = n[i];
+            return m;
+        }
+    }
+
     // multipliziert zwei Ziffernfeld
     static int[] times(int[] a, int[] b)
     {
-        if (Bigs.equal(a, b))
-            return Bigs.square(a);
-        else
-            return null; // TODO
+        int[] sum = Null();
+        for (int i = 0; i < b.length; ++i)
+        {
+            int[] p = times(a, b[i]);
+            int[] q = pow10(p, i);
+
+            sum = add(sum, q);
+        }
+
+        return sum;
     }
 
     // Quadratzahl eines Ziffernfeldes
@@ -290,16 +319,22 @@ class Bigs {
 
     public static void main(String[] s)
     {
+        check("log10d(12345) == 5", log10d(12345) == 5);
         checkEqu(add(fromInt(1234), fromInt(5678)), fromInt(6912));
         checkLess(fromInt(0), fromInt(1));
         checkLess(fromInt(99), fromInt(888));
         checkLess(fromInt(33), fromInt(34));
         checkLess(fromInt(23), fromInt(24));
-		check("!(1234 < 1234)", !less(fromInt(1234), fromInt(1234)));
-		checkEqu(times(fromInt(86442), 9), fromInt(77778));
+        check("!(1234 < 1234)", !less(fromInt(1234), fromInt(1234)));
+        checkEqu(times(fromInt(8642), 9), fromInt(77778));
+        checkEqu(times(fromInt(1234), 1), fromInt(1234));
+        checkEqu(times(fromInt(1234), 0), fromInt(0));
+        checkEqu(times(fromInt(123), fromInt(456)), fromInt(56088));
+        checkEqu(times(fromInt(12), fromInt(34)), fromInt(408));
+        checkEqu(times(fromInt(23), fromInt(45)), fromInt(1035));
 
         // --------------------------------------------------------
-		/*
+        /*!*/
         int[] a = One();
         for (int i = 0; i < 33222; ++i)
             a = times(a, 2);
@@ -318,6 +353,6 @@ class Bigs {
         System.out.println(less(a, c)); // Beantwortet die Frage aus der Aufgabenueberschrift
         maxDigit(a);
         maxDigit(c);
-		*/
+        /*!*/
     }
 }
