@@ -27,6 +27,8 @@ public class KochSchneeflocke {
         zeichneKochKurve(depth, CX, CY, AX, AY);
     }
 
+    private static double sqrt3 = 1.73205080757; // precomputed value of: sqrt(3)
+
     /**
      * Zeichnet eine Kochkurve mit der übergebenen Tiefe im Linienabschnitt von (x1,y1) nach (x5, y5).
      * 
@@ -41,6 +43,23 @@ public class KochSchneeflocke {
      * @param y5 - y-Koordinate des Endes des aktuellen Linienabschnitts
      */
     public static void zeichneKochKurve(int tiefe, double x1, double y1, double x5, double y5) {
-    	// TODO: Implementieren Sie das Zeichnen der Koch-Kurve
+        if (tiefe > 0)
+        {
+            double x2 = x1 + (x5 - x1) / 3;
+            double y2 = y1 + (y5 - y1) / 3;
+
+            double x3 = (x1 + x5) / 2 + (y1 - y5) * sqrt3 / 6;
+            double y3 = (y1 + y5) / 2 + (x5 - x1) * sqrt3 / 6;
+
+            double x4 = x1 + (x5 - x1) * 2 / 3;
+            double y4 = y1 + (y5 - y1) * 2 / 3;
+
+            zeichneKochKurve(tiefe - 1, x1, y1, x2, y2);
+            zeichneKochKurve(tiefe - 1, x2, y2, x3, y3);
+            zeichneKochKurve(tiefe - 1, x3, y3, x4, y4);
+            zeichneKochKurve(tiefe - 1, x4, y4, x5, y5);
+        }
+        else
+            StdDraw.line(x1, y1, x5, y5);
     }
 }
