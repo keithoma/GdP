@@ -1,14 +1,9 @@
 #! /usr/bin/env python3
 
+# XXX testing in python is quicker than in Java...
 
+from math import factorial
 
-
-
-
-
-
-
-import math
 class PrimeSums:
     def __init__(self, _n):
         self.n = _n
@@ -16,41 +11,48 @@ class PrimeSums:
 
     @staticmethod
     def is_prime(p):
-        return math.factorial(p - 1) % p - p == -1
+        return p >= 2 and factorial(p - 1) % p - p == -1 # TODO: maybe sieve me
+
+    @staticmethod
+    def next_prime(p):
+        p += 1
+        while PrimeSums.is_prime(p) is False: # TODO Sieve me
+            p += 1
+        return p
 
     # 4: 2+2
     # 5: 2+3
-    # 6: 3+3; 2+2+2
-    # 7: (2+2)+3
-    # 8: (2+2)+(2+2); 3+3+2; 5+3
-    # 9: 5+(2+2)
+    # 6: 2+2+2, 3+3
+    # 7: 2+2+3, 2+5
+    # 8: 2+2+2+2, 2+3+3, 3+5
+    # 9: 2+2+2+3, 2+2+5, 2+7, 3+3+3
     @staticmethod
-    def decompose(value, start = 2):
-        """
-        Decomposes a number into sum of primes.
-        Parameters:
-            value (int) : the value to decompose into sum of primes
-            start (int) : minimum prime to chose from (default: 2)
-        Returns:
-            int[] : array of primes
-        """
-        if PrimeSums.is_prime(value):
-            return [value]
-        res = []
-        n = value - start
-        while value > 0:
-            if PrimeSums.is_prime(n):
-                res.append(n)
-                value -= n
-                n = value
-            else:
-                n -= 1
-        return res
+    def decompose_all(n, smallestPrime = 2, callDepth = 1):
+        if n == smallestPrime:
+            return [[n]]
+        results = []
+        p = smallestPrime
+        while p <= n:
+            a = PrimeSums.decompose_all(n - p, p, callDepth + 1)
+            for a_k in a:
+                a_k.append(p)
+                a_k.sort()
+                if results.count(a_k) == 0:
+                    results.append(a_k)
+            p = PrimeSums.next_prime(p)
+
+        if PrimeSums.is_prime(n) and callDepth != 1:
+            print("add@{}: {}: {}".format(callDepth, n, results))
+            results.append([n])
+
+        results.sort()
+        return results
 
     def __str__(self):
         return "{}: {}".format(self.n, "+".join(str(i) for i in self.sums))
 
-N = 20
-for n in range(4, N + 1):
-    ps = PrimeSums(n)
-    print(ps)
+def test_n(n):
+    all_sums = PrimeSums.decompose_all(n)
+    for sums in all_sums:
+        print("{}: {}".format(n, sums))
+test_n(8)
