@@ -5,10 +5,6 @@
 from math import factorial
 
 class PrimeSums:
-    def __init__(self, _n):
-        self.n = _n
-        self.sums = PrimeSums.decompose(_n, 2)
-
     @staticmethod
     def is_prime(p):
         return p >= 2 and factorial(p - 1) % p - p == -1 # TODO: maybe sieve me
@@ -48,11 +44,9 @@ class PrimeSums:
         results.sort()
         return results
 
-    def __str__(self):
-        return "{}: {}".format(self.n, "+".join(str(i) for i in self.sums))
-
 def test_n(n):
     all_sums = PrimeSums.decompose_all(n)
     for sums in all_sums:
         print("{}: {}".format(n, sums))
+
 test_n(8)

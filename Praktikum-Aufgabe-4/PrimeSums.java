@@ -15,17 +15,13 @@ public class PrimeSums
 	}
 
 	// Primzahlsummenzerlegung
-	static int[] decompose(int n)
+	static int[][] decompose_all(int n)
 	{
-		if (prime(n))
-		{
-			int[] values = new int[1];
-			values[0] = n;
-			return values;
-		}
-		int[] s1 = decompose(n / 2);
-		int[] s2 = decompose(n % 2 == 0 ? n / 2 : n / 2 + 1);
-		return merge(s1, s2);
+		return decompose_all(n, 2, 1);
+	}
+
+	static int[][] decompose_all(int n, int smallestPrime, int callDepth)
+	{
 	}
 
 	// Merges two arrays of integers.
