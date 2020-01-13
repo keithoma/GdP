@@ -2,15 +2,25 @@ public class PrimeSums
 {
 	public static void main(String[] args)
 	{
-		int N = 10;
 		if (args.length > 1)
 			System.err.println("Mind the CLI.");
 		else
 		{
-			if (args.length == 1)
-				N = Integer.parseInt(args[0]);
-			for (int n = 4; n <= N; ++n)
-			System.out.printf("%d: %s\n", n, toString(decompose(n)));
+			if (args.length == 2 & args[0] == "-sums")
+			{
+				int N = Integer.parseInt(args[1]);
+				int[][] all_sums = decompose_all(N);
+				for (int i = 0; i < all_sums.length; i++)
+					System.out.printf("%s\n", toString(all_sums[i]));
+			}
+			else
+			{
+				int N = 10;
+				if (args.length == 1)
+					N = Integer.parseInt(args[0]);
+				for (int n = 4; n <= N; ++n)
+					; // System.out.printf("%d: %s\n", n, toString(decompose(n)));
+			}
 		}
 	}
 
@@ -22,29 +32,54 @@ public class PrimeSums
 
 	static int[][] decompose_all(int n, int smallestPrime, int callDepth)
 	{
+		if (n == smallestPrime) {
+			int[][] res = new int[1][];
+			res[0] = new int[1];
+			res[0][0] = n;
+			return res;
+		}
+
+		int[][] results = null; // TODO: empty array, stdlib missing, wtf !
+		int p = smallestPrime;
+		while (p <= n) {
+			int[][] a = PrimeSums.decompose_all(n - p, p, callDepth + 1);
+			for (int k = 0; k < a.length; ++k) {
+				append(a[k], p);
+				sort(a[k]);
+				if (!contains(results, a[k]))
+					append(results, a[k]);
+			}
+			p = next_prime(p);
+		}
+
+		if (PrimeSums.prime(n) && callDepth != 1) {
+			int[] n_ = {n};
+			append(results, n_);
+		}
+		sort(results);
+		return results;
 	}
 
-	// Merges two arrays of integers.
-	static int[] merge(int[] s1, int[] s2)
+	static boolean contains(int[][] a, int[] b)
 	{
-		int[] sm = new int[s1.length + s2.length];
-		int i = 0;
-		for (; i < s1.length; i++)
-			sm[i] = s1[i];
-		for (int j = 0; j < s2.length; ++j)
-			sm[i++] = s2[j];
-		return sm;
+		// TODO: test if b is in a
+		return false;
 	}
 
-	static long numberOfSums(int N)
-	{
-		return numberOfSums(N, 2);
+	static void sort(int[] array) {
+		// TODO: sort in-place
 	}
 
-	// ermittle die Anzahl der Primzahlsummen von n, bei der keine kleineren Summanden als min auftauchen
-	static long numberOfSums(int N, int min)
-	{
-		return 1; // TODO
+	static void sort(int[][] array) {
+		// TODO: sort in-place
+	}
+
+	static void append(int[] a, int b) {
+		// TODO (standard lib? ;-( )
+	}
+
+	static void append(int[][] a, int[] b) {
+		// TODO (standard lib? ;-( )
 	}
 
 	static String toString(int[] _S)
@@ -55,16 +90,7 @@ public class PrimeSums
 		return sval;
 	}
 
-	static boolean prime_sexy(int p)
-	{
-		// only works up to native int = 16 (poor Java :-D)
-		int factorial_p_1 = 1;
-		for (int n = 2; n <= p - 1; ++n)
-			factorial_p_1 *= n;
-		return (factorial_p_1 % p) == p - 1;
-	}
-
-	static boolean prime(int n)
+	static boolean prime(int n) // TODO: Sieve me
 	{
 		if (n <= 3)
 			return n >= 2;
@@ -77,5 +103,13 @@ public class PrimeSums
 					return false;
 			return true;
 		}
+	}
+
+	static int next_prime(int p)
+	{
+		p++;
+		while (!PrimeSums.prime(p)) // TODO: Sieve me
+			p++;
+		return p;
 	}
 }
