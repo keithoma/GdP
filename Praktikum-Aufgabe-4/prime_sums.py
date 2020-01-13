@@ -1,7 +1,4 @@
 #! /usr/bin/env python3
-
-# XXX testing in python is quicker than in Java...
-
 from math import factorial
 
 class PrimeSums:
@@ -16,12 +13,6 @@ class PrimeSums:
             p += 1
         return p
 
-    # 4: 2+2
-    # 5: 2+3
-    # 6: 2+2+2, 3+3
-    # 7: 2+2+3, 2+5
-    # 8: 2+2+2+2, 2+3+3, 3+5
-    # 9: 2+2+2+3, 2+2+5, 2+7, 3+3+3
     @staticmethod
     def decompose_all(n, smallestPrime = 2, callDepth = 1):
         if n == smallestPrime:
