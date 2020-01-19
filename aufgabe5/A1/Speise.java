@@ -16,7 +16,7 @@ public class Speise extends Lebensmittel {
         }
     }
 
-    public boolean trinken (int menge) {
+    public boolean trinken () {
         return false;
     }
 }

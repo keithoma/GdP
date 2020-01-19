@@ -6,7 +6,7 @@ public class Getraenk extends Lebensmittel {
         this.chunk = chunk;
     }
 
-    public boolean essen (int menge) {
+    public boolean essen () {
         return false;
     }
 
