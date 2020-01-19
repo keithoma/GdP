@@ -10,12 +10,12 @@ public class Getraenk extends Lebensmittel {
         return false;
     }
 
-    public boolean trinken (int menge) {
+    public boolean trinken () {
         if (this.menge <= this.chunk) {
             this.menge = 0;
             return false;
         } else {
-            this.menge -= menge;
+            this.menge -= this.chunk;
             return true;
         }
         

@@ -6,12 +6,12 @@ public class Speise extends Lebensmittel {
         this.chunk = chunk;
     }
 
-    public boolean essen (int menge) {
+    public boolean essen () {
         if (this.menge <= this.chunk) {
             this.menge = 0;
             return false;
         } else {
-            this.menge -= menge;
+            this.menge -= this.chunk;
             return true;
         }
     }
