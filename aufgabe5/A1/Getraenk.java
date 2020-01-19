@@ -1,4 +1,4 @@
-public abstract class Getraenk extends Lebensmittel {
+public class Getraenk extends Lebensmittel {
     private int chunk;
 
     public Getraenk(String name, int menge, int chunk) {
