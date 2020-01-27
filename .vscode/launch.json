@@ -2,9 +2,16 @@
     "configurations": [
         {
             "type": "java",
-            "name": "praktikum-A3-Bigs",
+            "name": "P-5/Dezidoku",
             "request": "launch",
-            "mainClass": "Bigs"
+            "classPaths": [
+                "${env:USERPROFILE}/AppData/Roaming/Code/User/workspaceStorage/4e208c0aef88ad239f85c0b8f01954bf/redhat.java/jdt_ws/jdt.ls-java-project/bin",
+                "${workspaceFolder}/Praktikum-Aufgabe-5/stdlib.jar",
+                "."
+            ],
+            "cwd": "${workspaceFolder}/Praktikum-Aufgabe-5",
+            "args": "< in5",
+            "mainClass": "Dezidoku"
         },
         {
             "type": "java",
@@ -18,6 +25,12 @@
             "cwd": "${workspaceFolder}/05week/GameOfLife",
             "args": "< GOLStable.conf",
             "mainClass": "GameOfLife"
+        },
+        {
+            "type": "java",
+            "name": "praktikum-A3-Bigs",
+            "request": "launch",
+            "mainClass": "Bigs"
         },
         {
             "type": "java",
