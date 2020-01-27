@@ -216,39 +216,34 @@ public class Dezidoku {
     // attempts to solve the game
     public void solve()
     {
-        if (trySolve())
+        if (trySolve(0))
             write();
         else
             StdOut.printf("nicht loesbar ;-(\n");
     }
 
-    private boolean trySolve()
+    private boolean trySolve(int startOffset)
     {
         //System.out.printf("trySolve: @%d\n", startOffset);
         // iterate through each cell and look for empty values
-        for (int i = 0; i < BOARD_SIZE; ++i)
+        for (int u = startOffset; u < BOARD_SIZE * BOARD_SIZE; u++)
         {
-            for (int j = 0; j < BOARD_SIZE; ++j)
+            //System.out.printf("trySolve[%d:%d]\n", i, j);
+            if (board[u] == EMPTY_VALUE)
             {
-                //System.out.printf("trySolve[%d:%d]\n", i, j);
-                if (at(i, j) == EMPTY_VALUE)
+                // check any possible value on that coordinate
+                for (int t = 0; t <= 9; ++t)
                 {
-                    // check any possible value on that coordinate
-                    for (int t = 0; t <= 9; ++t)
-                    {
-                        // System.out.printf("trySolve[%d] empty value at %d:%d (%d)\n",
-                        //         startOffset, u / BOARD_SIZE, u % BOARD_SIZE, t);
-                        this.board[i * BOARD_SIZE + j] = t;
+                    // System.out.printf("trySolve[%d] empty value at %d:%d (%d)\n",
+                    //         startOffset, u / BOARD_SIZE, u % BOARD_SIZE, t);
+                    this.board[u] = t;
 
-                        // if valid, continue (recursively)
-                        if (validate(i, j) && trySolve())
-                            return true;
-                        else
-                            ;//this.board[i * BOARD_SIZE + j] = EMPTY_VALUE;
-                    }
-                    this.board[i * BOARD_SIZE + j] = EMPTY_VALUE;
-                    return false;
+                    // if valid, continue (recursively)
+                    if (validate(u) && trySolve(u + 1))
+                        return true;
                 }
+                this.board[u] = EMPTY_VALUE;
+                return false;
             }
         }
         return true;
@@ -256,6 +251,8 @@ public class Dezidoku {
 
     private boolean validate(int i, int j)
     {
+        int i = u / BOARD_SIZE;
+        int j = u % BOARD_SIZE;
         return true
             && rowConstraint(i)
             && columnConstraint(j)
@@ -299,9 +296,6 @@ public class Dezidoku {
                 if (!verifyAt(constraint, ai, aj))
                     return false;
 
-        // if (constraint.equals(expected))
-        //     System.out.printf("!SUCC blockConstraint(%d,%d) | %s\n", bi, bj, constraint);
-
         return true;
     }
 
@@ -334,6 +328,16 @@ public class Dezidoku {
         {
             if (!constraint.get(at(row, column)))
                 constraint.set(at(row, column), true);
+            else
+                return false;
+        }
+        return true;
+    }
+    private boolean verifyAt(BitSet constraint, int offset) {
+        if (board[offset] != EMPTY_VALUE)
+        {
+            if (!constraint.get(board[offset]))
+                constraint.set(board[offset], true);
             else
                 return false;
         }
