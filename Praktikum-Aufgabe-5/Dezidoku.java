@@ -2,7 +2,6 @@
 import java.util.BitSet;
 import java.util.stream.IntStream;
 
-// TODO: comment out debug-prints
 // TODO: see if we can/want/have to get rid of IntStream but that's more readable!
 
 public class Dezidoku {
@@ -29,29 +28,6 @@ public class Dezidoku {
             this.board[i] = INVALID_VALUE;
     }
 
-    public void seed()
-    {
-        // in4 demo
-        String data = "....6...20" +
-                      ".3.......1" +
-                      "5.07..169." +
-                      "..3..7..52" +
-                      ".8....05.." +
-                      "..10....3." +
-                      "75..9..3.." +
-                      ".023..71.5" +
-                      "1.......7." +
-                      "04...8....";
-
-        for (int i = 0; i < data.length(); ++i)
-        {
-            if (data.charAt(i) >= '0' && data.charAt(i) <= '9')
-                this.board[i] = data.charAt(i) - '0';
-            else
-                this.board[i] = EMPTY_VALUE;
-        }
-    }
-
     // reads map from stdin
     public void read()
     {
@@ -71,7 +47,7 @@ public class Dezidoku {
             }
             else if (ch != '\n' && ch != '\r')
             {
-                System.out.printf("Invalid character in input at offset %d: %c\n", i, ch);
+                //System.out.printf("Invalid character in input at offset %d: %c\n", i, ch);
                 i++;
             }
         }
@@ -144,7 +120,7 @@ public class Dezidoku {
                             acc.set(v, true);
                         else
                         {
-                            StdOut.printf("Failed block [%d,%d]. %d already set: %s\n", ai, aj, v, acc);
+                            //StdOut.printf("Failed block [%d,%d]. %d already set: %s\n", ai, aj, v, acc);
                             return false;
                         }
                     }
@@ -152,7 +128,7 @@ public class Dezidoku {
 
                 if (strict && !acc.equals(expected))
                 {
-                    StdOut.printf("Failed in strict mode. Block (%d,%d) is incomplete: %s\n", bi, bj, acc);
+                    //StdOut.printf("Failed in strict mode. Block (%d,%d) is incomplete: %s\n", bi, bj, acc);
                     return false;
                 }
             }
@@ -171,7 +147,7 @@ public class Dezidoku {
                     acc.set(v, true);
                 else
                 {
-                    StdOut.printf("Failed horizontal line %d. %d already set: %s\n", i, v, acc);
+                    //StdOut.printf("Failed horizontal line %d. %d already set: %s\n", i, v, acc);
                     return false;
                 }
             }
@@ -190,7 +166,7 @@ public class Dezidoku {
                     acc.set(v, true);
                 else
                 {
-                    StdOut.printf("Failed vertical line %d. %d already set: %s\n", j, v, acc);
+                    //StdOut.printf("Failed vertical line %d. %d already set: %s\n", j, v, acc);
                     return false;
                 }
             }
@@ -211,7 +187,7 @@ public class Dezidoku {
                     acc.set(v, true);
                 else
                 {
-                    StdOut.printf("Failed diagonal line in [%d,%d]. %d already set: %s\n", i, j, v, acc);
+                    //StdOut.printf("Failed diagonal line in [%d,%d]. %d already set: %s\n", i, j, v, acc);
                     return false;
                 }
             }
@@ -228,7 +204,7 @@ public class Dezidoku {
                     acc.set(v, true);
                 else
                 {
-                    StdOut.printf("Failed diagonal line in [%d,%d]. %d already set: %s\n", i, j, v, acc);
+                    //StdOut.printf("Failed diagonal line in [%d,%d]. %d already set: %s\n", i, j, v, acc);
                     return false;
                 }
             }
@@ -268,8 +244,9 @@ public class Dezidoku {
                         if (validate(i, j) && trySolve())
                             return true;
                         else
-                            this.board[i * BOARD_SIZE + j] = EMPTY_VALUE;
+                            ;//this.board[i * BOARD_SIZE + j] = EMPTY_VALUE;
                     }
+                    this.board[i * BOARD_SIZE + j] = EMPTY_VALUE;
                     return false;
                 }
             }
@@ -353,8 +330,6 @@ public class Dezidoku {
     }
 
     private boolean verifyAt(BitSet constraint, int row, int column) {
-        if (row >= BOARD_SIZE || column >= BOARD_SIZE)
-            System.out.printf("verifyAt fails with %d:%d\n", row, column);
         if (at(row, column) != EMPTY_VALUE)
         {
             if (!constraint.get(at(row, column)))
