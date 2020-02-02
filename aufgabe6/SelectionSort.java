@@ -47,7 +47,7 @@ public class SelectionSort
 
         // sortierte Liste ausgeben
         for (int i = 0; i < a.length; ++i) {
-            int f = frequency(a[i], 'o');
+            int f = frequency(a[i], c);
             System.out.print(String.format("%d: %s\n", f, a[i]));
         }
     }
