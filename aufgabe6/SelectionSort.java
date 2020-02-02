@@ -31,23 +31,24 @@ public class SelectionSort
 
     public static void main(String[] argv)
     {
-        String[] poem = {
-            "Some say the world will end in fire,",
-            "Some say in ice.",
-            "From what I've tasted of desire",
-            "I hold with those who favor fire.",
-            "But if it had to perish twice,",
-            "I think I know enough of hate",
-            "To say that for destruction ice",
-            "Is also great",
-            "And would suffice."
-        };
+        if (argv.length == 0 || argv[0].length() != 1) {
+            System.out.println("Fehler: es wird ein Buchstabe als Parameter erwartet");
+            System.exit(-1);
+        }
 
-        sort(poem, 'o');
+        // den buchstaben aus dem Parameter extrahieren
+        char c = argv[0].charAt(0);
 
-        for (int i = 0; i < 9; ++i) {
-            int f = frequency(poem[i], 'o');
-            System.out.print(String.format("%d: %s\n", f, poem[i]));
+        // alle Zeilen ueber die Konsole einlesen
+        String[] a = StdIn.readAllLines();
+
+        // Array sortieren
+        sort(a, c);
+
+        // sortierte Liste ausgeben
+        for (int i = 0; i < a.length; ++i) {
+            int f = frequency(a[i], 'o');
+            System.out.print(String.format("%d: %s\n", f, a[i]));
         }
     }
 }
